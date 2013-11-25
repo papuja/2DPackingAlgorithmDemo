@@ -12,14 +12,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.packer.Packer;
-import org.packer.Packer.PackingAlgorithm;
+import org.packer.Packing;
+import org.packer.Packing.Algorithm;
 
 class SettingsPanel extends JPanel {
 	private RectangleSettingsPanel settingsPanel;
 	private JButton btnGenerateRectangles;
 	private JButton btnPackRectangles;
 	private DrawCanvas canvas;
+	private PackingSettingsPanel packingSettingsPanel;
 	private final int BIN_WIDTH = 512;
 	private final int BIN_HEIGHT = 512;
 	
@@ -40,6 +41,9 @@ class SettingsPanel extends JPanel {
 		this.btnGenerateRectangles.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.btnGenerateRectangles.addActionListener(new GenerateRectanglesListener());
 		this.add(this.btnGenerateRectangles);
+		
+		this.packingSettingsPanel = new PackingSettingsPanel();
+		this.add(packingSettingsPanel);
 		
 		this.btnPackRectangles = new JButton("Pack Rectangles");
 		this.btnPackRectangles.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -87,7 +91,8 @@ class SettingsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (generatedRectangles != null && !generatedRectangles.isEmpty()){
-				Packer.packRectangles(generatedRectangles, PackingAlgorithm.FIRST_FIT_DECREASING_HEIGHT, BIN_WIDTH);
+				Algorithm selectedAlgorithm = packingSettingsPanel.getSelectedAlgorithm();
+				Packing.packRectangles(generatedRectangles, selectedAlgorithm, BIN_WIDTH);
 				canvas.repaint();
 			}	
 		}
