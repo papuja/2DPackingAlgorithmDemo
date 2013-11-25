@@ -13,6 +13,7 @@ class PackerNFDH extends Packer{
 
 	@Override
 	public void pack(List<Rectangle> rectangles) {
+		this.sortRectanglesByHeight(rectangles);
 		int top = 0;
 		for (Rectangle r : rectangles){
 			if (currentLevel == null || !currentLevel.fitRectangle(r)){

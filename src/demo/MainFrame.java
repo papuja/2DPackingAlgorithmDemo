@@ -1,12 +1,9 @@
 package demo;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 
-import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 
 class MainFrame extends JFrame {

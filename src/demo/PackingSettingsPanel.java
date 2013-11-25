@@ -7,11 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import org.packer.Packing;
 import org.packer.Packing.Algorithm;
 
 class PackingSettingsPanel extends JPanel {
 	private JComboBox<Algorithm> algorithmChooser;
-	private Algorithm[] algorithms = {Algorithm.FIRST_FIT_DECREASING_HEIGHT, Algorithm.NEXT_FIT_DECREASING_HEIGHT};
+	private Algorithm[] algorithms = Packing.getAll();
 	public PackingSettingsPanel(){
 		Border border = BorderFactory.createEmptyBorder(5, 0, 5, 0);
 		this.setBorder(border);

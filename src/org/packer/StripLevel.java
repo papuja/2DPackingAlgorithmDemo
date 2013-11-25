@@ -20,4 +20,13 @@ class StripLevel{
 		}
 		return false;
 	}
+	
+	public int availableWidth(){
+		return this.availableWidth;
+	}
+	
+	public boolean canFit(Rectangle r){
+		if (this.availableWidth - r.width >= 0) return true;
+		return false;
+	}
 }
