@@ -23,27 +23,27 @@ class DrawCanvas extends JPanel{
 		this.setBorder(border);
 	}
 	
-	public void addRectangle(Rectangle r){
+	public void addRectangle(IndexedRectangle r){
 		this.canvas.addRectangle(r);
 	}
 	public void clearRectangles(){
 		this.canvas.clearRectangles();
 	}
-	public void setRectangles(List<Rectangle> rectangles){
+	public void setRectangles(List<IndexedRectangle> rectangles){
 		this.canvas.setRectangles(rectangles);
 		this.canvas.repaint();
 	}
 	
 	private class Canvas extends JComponent{
-		List<Rectangle> rectangles;
+		List<IndexedRectangle> rectangles;
 		public Canvas(){
-			this.rectangles = new ArrayList<Rectangle>();
+			this.rectangles = new ArrayList<IndexedRectangle>();
 		}
 		
-		public void addRectangle(Rectangle r){
+		public void addRectangle(IndexedRectangle r){
 			this.rectangles.add(r);
 		}
-		public void setRectangles(List<Rectangle> rectangles){
+		public void setRectangles(List<IndexedRectangle> rectangles){
 			this.rectangles = rectangles;
 		}
 		public void clearRectangles(){
@@ -52,8 +52,11 @@ class DrawCanvas extends JPanel{
 		
 		public void paintComponent(Graphics g){
 			g.setColor(Color.blue);
-			for (Rectangle r : this.rectangles){
+			for (IndexedRectangle r : this.rectangles){
+				int midX = r.x + r.width/2-5;
+				int midY = r.y + r.height / 2+5;
 				g.drawRect(r.x, r.y, r.width, r.height);
+				g.drawString(r.getIndex()+ "", midX, midY);
 			}
 		}
 		

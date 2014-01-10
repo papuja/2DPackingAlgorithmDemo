@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -12,8 +13,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.packer.Packing;
-import org.packer.Packing.Algorithm;
+import org.packer.Packer;
+import org.packer.Packer.Algorithm;
 
 class SettingsPanel extends JPanel {
 	private RectangleSettingsPanel settingsPanel;
@@ -24,7 +25,7 @@ class SettingsPanel extends JPanel {
 	private final int BIN_WIDTH = 512;
 	private final int BIN_HEIGHT = 512;
 	
-	private List<Rectangle> generatedRectangles;
+	private List<IndexedRectangle> generatedRectangles;
 	
 	public SettingsPanel(DrawCanvas canvas){
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -62,7 +63,7 @@ class SettingsPanel extends JPanel {
 			 int minWidth = settingsPanel.getMinWidth();
 			 int maxHeight = settingsPanel.getMaxHeight();
 			 int minHeight = settingsPanel.getMinHeight();
-			List<Rectangle> randomRectangles = new ArrayList<Rectangle>();	
+			List<IndexedRectangle> randomRectangles = new ArrayList<IndexedRectangle>();	
 			
 			int accumulatedArea = 0;
 			while(true){
@@ -70,7 +71,7 @@ class SettingsPanel extends JPanel {
 				int height = rnd.nextInt(maxHeight-minHeight+1) + minHeight;
 				int area = width * height;
 				if (area + accumulatedArea <= maxArea){
-					Rectangle r = new Rectangle(0, 0, width, height);
+					IndexedRectangle r = new IndexedRectangle(width, height);
 					randomRectangles.add(r);
 					accumulatedArea += area;
 				}else{
@@ -82,6 +83,10 @@ class SettingsPanel extends JPanel {
 				}
 			}
 			generatedRectangles = randomRectangles;
+			Collections.sort(generatedRectangles, new NonIncreasingHeightRectangleComparator());
+			for (int i = 1; i <= generatedRectangles.size(); i++){
+				generatedRectangles.get(i-1).setIndex(i);
+			}
 			canvas.setRectangles(randomRectangles);
 		}
 		
@@ -92,8 +97,9 @@ class SettingsPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (generatedRectangles != null && !generatedRectangles.isEmpty()){
 				Algorithm selectedAlgorithm = packingSettingsPanel.getSelectedAlgorithm();
-				Packing.packRectangles(generatedRectangles, selectedAlgorithm, BIN_WIDTH);
-				canvas.repaint();
+				List<IndexedRectangle> rectangles = Packer.pack(generatedRectangles, selectedAlgorithm, BIN_WIDTH);
+				canvas.setRectangles(rectangles);
+				canvas.repaint(); 
 			}	
 		}
 	}

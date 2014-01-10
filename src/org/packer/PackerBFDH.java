@@ -2,22 +2,20 @@ package org.packer;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class PackerBFDH extends Packer{
+public class PackerBFDH<T extends Rectangle> extends Packer<T>{
 	private List<StripLevel> levels;
-	private int stripWidth;
 	
-	public PackerBFDH(int stripWidth){
-		this.stripWidth = stripWidth;
+	public PackerBFDH(int stripWidth, List<T> rectangles){
+		super(stripWidth, rectangles);
 		this.levels = new ArrayList<StripLevel>();
 	}
 	@Override
-	public void pack(List<Rectangle> rectangles) {
+	public List<T> pack() {
 		int top = 0;
-		this.sortRectanglesByHeight(rectangles);
-		for (Rectangle r : rectangles){
+		this.sortByNonIncreasingHeight(this.rectangles);
+		for (Rectangle r : this.rectangles){
 			StripLevel levelWithSmallestResidual = null;
 			for (StripLevel level : this.levels){
 				if (level.canFit(r)){
@@ -38,5 +36,6 @@ public class PackerBFDH extends Packer{
 			}
 			
 		}
+		return this.rectangles;
 	}
 }

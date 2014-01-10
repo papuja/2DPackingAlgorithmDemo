@@ -3,24 +3,24 @@ package org.packer;
 import java.awt.Rectangle;
 import java.util.List;
 
-class PackerNFDH extends Packer{
+class PackerNFDH<T extends Rectangle> extends Packer<T>{
 	private StripLevel currentLevel;
-	private int maxWidth;
 	
-	public PackerNFDH(int maxWidth){
-		this.maxWidth = maxWidth;
+	public PackerNFDH(int stripWidth, List<T> rectangles){
+		super(stripWidth, rectangles);
 	}
 
 	@Override
-	public void pack(List<Rectangle> rectangles) {
-		this.sortRectanglesByHeight(rectangles);
+	public List<T> pack() {
+		this.sortByNonIncreasingHeight(rectangles);
 		int top = 0;
 		for (Rectangle r : rectangles){
 			if (currentLevel == null || !currentLevel.fitRectangle(r)){
-				currentLevel = new StripLevel(maxWidth, top);
+				currentLevel = new StripLevel(this.stripWidth, top);
 				currentLevel.fitRectangle(r);
 				top += r.height;
 			}
 		}
+		return this.rectangles;
 	}
 }
